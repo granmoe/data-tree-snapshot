@@ -67,6 +67,11 @@
     "extends": "xo-react",
     "prettier": true,
     "space": true,
+    "settings": {
+      "react": {
+        "version": "16.8.6"
+      }
+    },
     "env": [
       "jest"
     ],
