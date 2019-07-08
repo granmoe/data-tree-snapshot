@@ -26,8 +26,38 @@ const getTestIdTree = elementOrArray => {
     : compactedTestIdTreeArray
 }
 
-export default element =>
-  JSON.stringify(getTestIdTree([...element.children]), null, 2).replace(
-    /"/g,
-    "'",
-  )
+export default elementOrString => {
+  let element
+  if (typeof elementOrString === 'string') {
+    element = document.querySelector(`[data-testid="${elementOrString}"]`)
+
+    if (element === null) {
+      throw new ReferenceError(
+        `No element found for data-testid: ${elementOrString}`,
+      )
+    }
+  } else {
+    // TODO: throw when not element
+    element = elementOrString
+  }
+
+  const testIdTree = getTestIdTree([...element.children])
+  // Maybe strip surrounding [] if always returned
+
+  const testIdTreeJsonString = JSON.stringify(testIdTree, null, 2)
+    .replace(
+      /[",]/g, // TODO: Is it valid to use a comma in an HTML attribute string?
+      '',
+    )
+    .replace(/[{}[\]]/g, '') // FIXME: Maybe remove this...need to see if results are more readable
+    .replace(/(\n(\s*)){2,}/g, '\n$2') // FIXME: Get this working
+  // Also, find a way to fix testid1: testid2...should be a newline for every nested level
+
+  // TODO: Remove colons and somehow fix extra indents
+
+  return ['{', '['].includes(testIdTreeJsonString.charAt(0))
+    ? testIdTreeJsonString.slice(1, testIdTreeJsonString.length - 1)
+    : testIdTreeJsonString
+}
+
+// FIXME: Some way to pass querySelector
