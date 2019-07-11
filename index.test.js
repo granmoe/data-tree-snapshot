@@ -18,12 +18,12 @@ test('direct children only', () => {
   const { getByTestId } = render(<DirectChildrenOnly />)
   const tree = getTestIdTree(getByTestId('direct-children-only'))
   expect(tree).toMatchInlineSnapshot(`
-                                            "
-                                              first-child
-                                              second-child
-                                              three-child
-                                            "
-                      `)
+        "
+          first-child
+          second-child
+          three-child
+        "
+    `)
 })
 
 test('direct children and one parent', () => {
@@ -31,7 +31,7 @@ test('direct children and one parent', () => {
   const tree = getTestIdTree(container)
   expect(tree).toMatchInlineSnapshot(`
     "
-      direct-children-only: 
+      direct-children-only
         first-child
         second-child
         three-child
@@ -67,8 +67,9 @@ test('multiple single child layers', () => {
   // TODO: Better way to represent this?
   expect(tree).toMatchInlineSnapshot(`
     "
-      child: 
-        grandchild: child
+      child
+          grandchild
+            child
     "
   `)
 })
@@ -79,32 +80,32 @@ test('multiple single child layers', () => {
 // TODO: Enumerate all possible structures in tree
 test('scratchpad', () => {
   const { container } = render(
-    <OnlyOneChild>
-      <OnlyOneChild dataTestId="grandchild" />
-      <DirectChildrenOnly />
+    <div>
+      <div>
+        <div>
+          <OnlyOneChild />
+        </div>
+      </div>
       <OnlyOneChild>
+        <OnlyOneChild dataTestId="grandchild" />
         <DirectChildrenOnly />
       </OnlyOneChild>
-    </OnlyOneChild>,
+      ,
+    </div>,
   )
 
   const tree = getTestIdTree(container)
 
   expect(tree).toMatchInlineSnapshot(`
     "
-      only-one-child: 
-        child: 
-            grandchild: child
-            direct-children-only: 
-              first-child
-              second-child
-              three-child
-            only-one-child: 
-              child: 
-                direct-children-only: 
-                  first-child
-                  second-child
-                  three-child
+      only-one-child
+          child
+              grandchild
+                child
+              direct-children-only
+                first-child
+                second-child
+                three-child
     "
   `)
 })
