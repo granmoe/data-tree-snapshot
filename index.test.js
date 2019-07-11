@@ -89,6 +89,9 @@ test('scratchpad', () => {
       <OnlyOneChild>
         <OnlyOneChild dataTestId="grandchild" />
         <DirectChildrenOnly />
+        <div>
+          <OnlyOneChild />
+        </div>
       </OnlyOneChild>
       ,
     </div>,
