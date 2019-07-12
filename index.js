@@ -43,5 +43,5 @@ export default elementOrString => {
     )
   }
 
-  return `\n${getTestIdTree([...element.children])}\n`
+  return `\n${getTestIdTree([...element.children])}\n` // Surround with newlines for nice formatting in jest snapshots and so that horizontal lines in editor line up perfectly in snapshot
 }
