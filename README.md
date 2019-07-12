@@ -2,7 +2,7 @@
 
 Create the smallest possible representation of what test ids are contained in a DOM element and within other test ids within that DOM element. `get-test-id-tree` only preserves ancestor/descendant relationships because it is used to assert that a given test id _contains_ another test id or test ids. This compacted tree structure is created recursively for the entire DOM tree within the given DOM element or data-testid string.
 
-(TODO: Background info justifying data-testids, links (@TL/R, KCD blog))
+TODO: Background info justifying data-testids, links (@TL/R, KCD blog)
 
 ## Basic Example
 
@@ -85,6 +85,10 @@ test('example from the README', () => {
   `)
 })
 ```
+
+## Motivation
+
+TODO: real world examples with tons of expect(element).toBeTruthy / toBeFalsy()
 
 ## Installation and Requirements
 
