@@ -18,12 +18,12 @@ test('Can pass a string of an existent test id', () => {
   render(<DirectChildrenOnly />)
   const tree = getTestIdTree('root')
   expect(tree).toMatchInlineSnapshot(`
-        "
-        first-child
-        second-child
-        third-child
-        "
-    `)
+                    "
+                    first-child
+                    second-child
+                    third-child
+                    "
+          `)
 })
 
 test('Passing a string of non-existent test id throws', () => {
@@ -37,13 +37,13 @@ test('Can pass a DOM element', () => {
   const { container } = render(<DirectChildrenOnly />)
   const tree = getTestIdTree(container)
   expect(tree).toMatchInlineSnapshot(`
-    "
-    root
-      first-child
-      second-child
-      third-child
-    "
-  `)
+                "
+                root
+                  first-child
+                  second-child
+                  third-child
+                "
+        `)
 })
 
 test('Passing a non-string that is not a DOM element throws', () => {
@@ -145,6 +145,37 @@ root
   })
 })
 
+test(`Treats test ids that aren't non-empty strings as empty intermediate layers`, () => {
+  render(
+    <div data-testid="root">
+      <div data-testid="">
+        <div data-testid={null}>
+          <div data-testid={undefined}>
+            <br data-testid="first-child" />
+          </div>
+        </div>
+        <div data-testid={[]}>
+          <div data-testid="second-child">
+            <br data-testid="first-grandchild" />
+          </div>
+        </div>
+      </div>
+    </div>,
+  )
+
+  expect(getTestIdTree('root')).toMatchInlineSnapshot(`
+    "
+    first-child
+    second-child
+      first-grandchild
+    "
+  `)
+
+  // NOTE: React casts certain things (including objects, sets, numbers, booleans)
+  // To string when they are passed as the value of an HTML attribute
+  // But there's probably no good reason to pass these as test ids anyway
+})
+
 // eslint-disable-next-line react/prop-types
 const OnlyOneChild = ({ dataTestId = 'only-one-child', children }) => {
   return (
@@ -158,10 +189,10 @@ test('only one child', () => {
   const { getByTestId } = render(<OnlyOneChild />)
   const tree = getTestIdTree(getByTestId('only-one-child'))
   expect(tree).toMatchInlineSnapshot(`
-        "
-        child
-        "
-    `)
+                    "
+                    child
+                    "
+          `)
 })
 
 test('multiple single child layers', () => {
@@ -174,10 +205,10 @@ test('multiple single child layers', () => {
   const tree = getTestIdTree('only-one-child')
 
   expect(tree).toMatchInlineSnapshot(`
-        "
-        child
-          grandchild
-            child
-        "
-    `)
+                    "
+                    child
+                      grandchild
+                        child
+                    "
+          `)
 })

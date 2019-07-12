@@ -8,21 +8,23 @@ const getTestIdTree = (elementOrArray, level = 0) => {
 
   const indent = ' '.repeat(level * 2)
 
+  const testId = elementOrArray.getAttribute('data-testid')
+  const isValidTestId = typeof testId === 'string' && testId.length > 0
+
   if (elementOrArray.children.length === 0) {
-    return `${indent}${elementOrArray.getAttribute('data-testid')}`
+    return isValidTestId ? `${indent}${testId}` : null
   }
 
-  const testId = elementOrArray.getAttribute('data-testid')
   const testIdTree = getTestIdTree(
     [...elementOrArray.children],
-    testId ? level + 1 : level,
+    isValidTestId ? level + 1 : level,
   )
 
   if (testIdTree.length === 0) {
-    return `${indent}${testId}`
+    return isValidTestId ? `${indent}${testId}` : null
   }
 
-  return testId ? `${indent}${testId}\n${testIdTree}` : testIdTree
+  return isValidTestId ? `${indent}${testId}\n${testIdTree}` : testIdTree
 }
 
 export default elementOrString => {
