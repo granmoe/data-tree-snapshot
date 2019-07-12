@@ -38,6 +38,10 @@ parent
   yet-another-child
 ```
 
+## Examples
+
+More realistic examples to come...for now, check out the test cases in index.test.js 🙂
+
 ## Usage
 
 ```
