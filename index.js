@@ -9,17 +9,20 @@ const getTestIdTree = (elementOrArray, level = 0) => {
   const indent = ' '.repeat(level * 2)
 
   if (elementOrArray.children.length === 0) {
-    return `${indent}${level}-${elementOrArray.getAttribute('data-testid')}`
+    return `${indent}${elementOrArray.getAttribute('data-testid')}`
   }
 
   const testId = elementOrArray.getAttribute('data-testid')
-  const testIdTree = getTestIdTree([...elementOrArray.children], level + 1)
+  const testIdTree = getTestIdTree(
+    [...elementOrArray.children],
+    testId ? level + 1 : level,
+  )
 
   if (testIdTree.length === 0) {
-    return `${indent}${level}-${testId}`
+    return `${indent}${testId}`
   }
 
-  return testId ? `${indent}${level}${testId}\n${testIdTree}` : testIdTree
+  return testId ? `${indent}${testId}\n${testIdTree}` : testIdTree
 }
 
 export default elementOrString => {
@@ -32,16 +35,13 @@ export default elementOrString => {
         `No element found for data-testid: ${elementOrString}`,
       )
     }
-  } else {
-    // TODO: throw when not element
+  } else if (elementOrString instanceof Element) {
     element = elementOrString
+  } else {
+    throw new TypeError(
+      'You must pass either an HTML Element or a string to get-test-id-tree',
+    )
   }
 
-  // TODO: Walk lines in printout and collapse levels
-
-  const testIdTree = getTestIdTree([...element.children])
-
-  console.log(testIdTree)
-
-  return testIdTree
+  return `\n${getTestIdTree([...element.children])}\n`
 }

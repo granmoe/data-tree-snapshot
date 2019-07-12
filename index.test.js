@@ -6,37 +6,143 @@ afterEach(cleanup)
 
 const DirectChildrenOnly = () => {
   return (
-    <div data-testid="direct-children-only">
+    <div data-testid="root">
       <br data-testid="first-child" />
       <br data-testid="second-child" />
-      <br data-testid="three-child" />
+      <br data-testid="third-child" />
     </div>
   )
 }
 
-test('direct children only', () => {
-  const { getByTestId } = render(<DirectChildrenOnly />)
-  const tree = getTestIdTree(getByTestId('direct-children-only'))
+test('Can pass a string of an existent test id', () => {
+  render(<DirectChildrenOnly />)
+  const tree = getTestIdTree('root')
   expect(tree).toMatchInlineSnapshot(`
         "
-          first-child
-          second-child
-          three-child
+        first-child
+        second-child
+        third-child
         "
     `)
 })
 
-test('direct children and one parent', () => {
+test('Passing a string of non-existent test id throws', () => {
+  render(<DirectChildrenOnly />)
+  expect(() => {
+    getTestIdTree('some crazy stuff')
+  }).toThrow()
+})
+
+test('Can pass a DOM element', () => {
   const { container } = render(<DirectChildrenOnly />)
   const tree = getTestIdTree(container)
   expect(tree).toMatchInlineSnapshot(`
     "
-      direct-children-only
-        first-child
-        second-child
-        three-child
+    root
+      first-child
+      second-child
+      third-child
     "
   `)
+})
+
+test('Passing a non-string that is not a DOM element throws', () => {
+  expect(() => {
+    getTestIdTree({})
+  }).toThrow()
+})
+
+const emptyIntermediateLayersTestCases = [
+  () => (
+    <div data-testid="root">
+      <br data-testid="first-child" />
+      <div data-testid="second-child">
+        <br data-testid="child-of-second-child" />
+      </div>
+      <br data-testid="third-child" />
+    </div>
+  ),
+  () => (
+    <div data-testid="root">
+      <div>
+        <br data-testid="first-child" />
+      </div>
+      <div data-testid="second-child">
+        <br data-testid="child-of-second-child" />
+      </div>
+      <br data-testid="third-child" />
+    </div>
+  ),
+  () => (
+    <div data-testid="root">
+      <div>
+        <div>
+          <br data-testid="first-child" />
+        </div>
+        <div data-testid="second-child">
+          <br data-testid="child-of-second-child" />
+        </div>
+      </div>
+      <br data-testid="third-child" />
+    </div>
+  ),
+  () => (
+    <div data-testid="root">
+      <div>
+        <div>
+          <div>
+            <br data-testid="first-child" />
+          </div>
+          <div data-testid="second-child">
+            <br data-testid="child-of-second-child" />
+          </div>
+        </div>
+      </div>
+      <br data-testid="third-child" />
+    </div>
+  ),
+  () => (
+    <div data-testid="root">
+      <div>
+        <div>
+          <div>
+            <div>
+              <div>
+                <br data-testid="first-child" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-testid="second-child">
+        <br data-testid="child-of-second-child" />
+      </div>
+      <div>
+        <div>
+          <div>
+            <div>
+              <div>
+                <br data-testid="third-child" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  ),
+]
+
+emptyIntermediateLayersTestCases.forEach((Component, i) => {
+  it(`collapses non-tagged intermediate layers, test case ${i}`, () => {
+    const { container } = render(<Component />)
+    expect(getTestIdTree(container)).toBe(`
+root
+  first-child
+  second-child
+    child-of-second-child
+  third-child
+`)
+  })
 })
 
 // eslint-disable-next-line react/prop-types
@@ -51,64 +157,27 @@ const OnlyOneChild = ({ dataTestId = 'only-one-child', children }) => {
 test('only one child', () => {
   const { getByTestId } = render(<OnlyOneChild />)
   const tree = getTestIdTree(getByTestId('only-one-child'))
-  expect(tree).toMatchInlineSnapshot(`"child"`)
+  expect(tree).toMatchInlineSnapshot(`
+        "
+        child
+        "
+    `)
 })
 
-// TODO: Term...levels, layers, generations, branches
 test('multiple single child layers', () => {
-  const { getByTestId } = render(
+  render(
     <OnlyOneChild>
       <OnlyOneChild dataTestId="grandchild" />
     </OnlyOneChild>,
   )
 
-  const tree = getTestIdTree(getByTestId('only-one-child'))
+  const tree = getTestIdTree('only-one-child')
 
-  // TODO: Better way to represent this?
   expect(tree).toMatchInlineSnapshot(`
-    "
-      child
+        "
+        child
           grandchild
             child
-    "
-  `)
-})
-
-// TODO: If this is used for examples also, find more realistic names for data-testids
-// Might make testing harder to reason about, though...so prob have separate examples
-
-// TODO: Enumerate all possible structures in tree
-test('scratchpad', () => {
-  const { container } = render(
-    <div>
-      <div>
-        <div>
-          <OnlyOneChild />
-        </div>
-      </div>
-      <OnlyOneChild>
-        <OnlyOneChild dataTestId="grandchild" />
-        <DirectChildrenOnly />
-        <div>
-          <OnlyOneChild />
-        </div>
-      </OnlyOneChild>
-      ,
-    </div>,
-  )
-
-  const tree = getTestIdTree(container)
-
-  expect(tree).toMatchInlineSnapshot(`
-    "
-      only-one-child
-          child
-              grandchild
-                child
-              direct-children-only
-                first-child
-                second-child
-                three-child
-    "
-  `)
+        "
+    `)
 })
