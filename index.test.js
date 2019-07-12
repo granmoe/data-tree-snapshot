@@ -18,12 +18,12 @@ test('Can pass a string of an existent test id', () => {
   render(<DirectChildrenOnly />)
   const tree = getTestIdTree('root')
   expect(tree).toMatchInlineSnapshot(`
-                    "
-                    first-child
-                    second-child
-                    third-child
-                    "
-          `)
+                        "
+                        first-child
+                        second-child
+                        third-child
+                        "
+            `)
 })
 
 test('Passing a string of non-existent test id throws', () => {
@@ -37,13 +37,13 @@ test('Can pass a DOM element', () => {
   const { container } = render(<DirectChildrenOnly />)
   const tree = getTestIdTree(container)
   expect(tree).toMatchInlineSnapshot(`
-                "
-                root
-                  first-child
-                  second-child
-                  third-child
-                "
-        `)
+                    "
+                    root
+                      first-child
+                      second-child
+                      third-child
+                    "
+          `)
 })
 
 test('Passing a non-string that is not a DOM element throws', () => {
@@ -164,12 +164,12 @@ test(`Treats test ids that aren't non-empty strings as empty intermediate layers
   )
 
   expect(getTestIdTree('root')).toMatchInlineSnapshot(`
-    "
-    first-child
-    second-child
-      first-grandchild
-    "
-  `)
+        "
+        first-child
+        second-child
+          first-grandchild
+        "
+    `)
 
   // NOTE: React casts certain things (including objects, sets, numbers, booleans)
   // To string when they are passed as the value of an HTML attribute
@@ -189,10 +189,10 @@ test('only one child', () => {
   const { getByTestId } = render(<OnlyOneChild />)
   const tree = getTestIdTree(getByTestId('only-one-child'))
   expect(tree).toMatchInlineSnapshot(`
-                    "
-                    child
-                    "
-          `)
+                        "
+                        child
+                        "
+            `)
 })
 
 test('multiple single child layers', () => {
@@ -205,10 +205,42 @@ test('multiple single child layers', () => {
   const tree = getTestIdTree('only-one-child')
 
   expect(tree).toMatchInlineSnapshot(`
-                    "
-                    child
-                      grandchild
+                        "
                         child
-                    "
-          `)
+                          grandchild
+                            child
+                        "
+            `)
+})
+
+test('example from the README', () => {
+  render(
+    <div data-testid="root">
+      <div>
+        <div data-testid="parent">
+          <div data-testid="child">
+            <div>
+              <div>
+                <span data-testid="deeply-nested-child">some stuff</span>
+              </div>
+            </div>
+          </div>
+          <br data-testid="another-child" />
+          <div>
+            <br data-testid="yet-another-child" />
+          </div>
+        </div>
+      </div>
+    </div>,
+  )
+
+  expect(getTestIdTree('root')).toMatchInlineSnapshot(`
+    "
+    parent
+      child
+        deeply-nested-child
+      another-child
+      yet-another-child
+    "
+  `)
 })
