@@ -1,57 +1,23 @@
-# Get Document Data Tree 🌳
+# Data Tree Snapshot 🌳
 
 ## Intro
 
-Create the smallest possible representation of the tree structure of the values of any attribute contained in a DOM element. `get-attribute-tree` only preserves ancestor/descendant relationships because it is used to assert that a given element _contains_ a certain structure. This compacted tree structure is created recursively for the entire DOM tree within the given DOM element.
+Create the smallest possible representation of the tree structure of the values of any attribute or property contained in a DOM element. `get-attribute-tree` only preserves ancestor/descendant relationships because it is used to assert that a given element _contains_ a certain structure. This compacted tree structure is created recursively for the entire DOM tree within the given DOM element.
 
-## Basic Example
-
-This HTML:
-
-```html
-<div data-testid="root">
-  <div>
-    <div data-testid="parent">
-      <div data-testid="child">
-        <div>
-          <div>
-            <span data-testid="deeply-nested-child">some stuff</span>
-          </div>
-        </div>
-      </div>
-      <br data-testid="another-child" />
-      <div>
-        <br data-testid="yet-another-child" />
-      </div>
-    </div>
-  </div>
-</div>
-```
-
-Will produce this concise, neatly formatted output:
+## Installation
 
 ```
-parent
-  child
-    deeply-nested-child
-  another-child
-  yet-another-child
+npm install data-tree-snapshot -D
 ```
 
-## Examples
+## Examples / Cool Things You Can Do With This
 
-More realistic examples to come...for now, check out the test cases in index.test.js 🙂
-
-## Usage
-
-```
-npm install get-test-id-tree -D
-```
+### Test Id Tree Snapshotting
 
 ```js
 import React from 'react'
 import { render } from '@testing-library/react'
-import getTestIdTree from 'get-test-id-tree'
+import { getTestIdTree } from 'data-tree-snapshot' // TODO: Implement this and export it
 
 test('example from the README', () => {
   render(
@@ -87,43 +53,59 @@ test('example from the README', () => {
 })
 ```
 
-## Motivation
+#### Implementation
 
-If you use data-testids a lot for testing (and possibly other things, like analytics), and your app has a high volume of complex conditional rendering across various scenarios based on multitudinous factors like feature flags, types of client / user, and responsive designs, in addition to your standard UI logic, then you may have tests that look like this:
-
-```js
-expect(getByTestId('section-a')).toBeTruthy()
-expect(getByTestId('section-b')).toBeTruthy()
-expect(getByTestId('section-c')).toBeFalsy()
-expect(getByTestId('section-d')).toBeTruthy()
-
-expect(getByTestId('widget-1')).toBeTruthy()
-expect(getByTestId('something-inside-widget-1')).toBeTruthy()
-expect(getByTestId('something-that-should-not-be-there')).toBeFalsy()
-expect(getByTestId('this-should-not-be-there-either')).toBeFalsy()
-
-expect(getByTestId('foo-a')).toBeFalsy()
-expect(getByTestId('foo-b')).toBeTruthy()
-
-expect(getByTestId('bar')).toBeTruthy()
-expect(getByTestId('baz')).toBeFalsy()
-expect(getByTestId('quux')).toBeTruthy()
-```
-
-`get-test-id-tree` turns that into this:
+Here's how this is implemented on top of data-tree-snapshot:
 
 ```js
-// You can always use a normal, separate snapshot via toMatchSnapshot also
-expect(getTestIdTree('wrapper')).toMatchInlineSnapshot(`
-"
-section-a
-section-b
-section-d
-widget-1
-  something-inside-widget-1
-foo-b
-bar
-quux
-"
-`)
 ```
+
+#### Notes
+
+Link to other repo?
+
+### Text Snapshotting
+
+```
+test('has correct textContent', () => {
+  const { container } = render(
+    <div>
+      Heading
+      <div>
+        Subheading
+        <div>Paragraph 1</div>
+        <div>Paragraph 2</div>
+        <div>Paragraph 3</div>
+      </div>
+    </div>,
+  )
+
+  const getTextContentTree = makeGetAttributeTree({
+    propertyName: 'textContent',
+    filter: t => typeof t === 'string' && t.length > 0,
+  })
+
+  const tree = getTextContentTree(container) // TODO: Allow passing in a root selector func
+
+  expect(tree).toMatchInlineSnapshot(`
+    "
+    Heading
+      Subheading
+        Paragraph 1
+        Paragraph 2
+        Paragraph 3
+    "
+  `)
+})
+```
+
+#### Implementation
+
+Here's how this is implemented on top of data-tree-snapshot:
+
+```js
+```
+
+## Upcoming Features
+
+- Ability to include multiple pieces of data per element
