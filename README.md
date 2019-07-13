@@ -62,7 +62,7 @@ Here's how this is implemented on top of data-tree-snapshot:
 
 #### Notes
 
-Link to other repo?
+Link to other repo or move it all in here? Just a lot of text...maybe put in a different file
 
 ### Text Snapshotting
 
