@@ -1,16 +1,16 @@
 {
-  "name": "get-attribute-tree",
+  "name": "data-tree-snapshot",
   "version": "1.0.0",
   "main": "dist/index.js",
   "license": "MIT",
   "author": "Matt Granmoe",
-  "homepage": "https://github.com/granmoe/get-attribute-tree",
+  "homepage": "https://github.com/granmoe/data-tree-snapshot",
   "repository": {
     "type": "git",
-    "url": "https://github.com/granmoe/get-attribute-tree.git"
+    "url": "https://github.com/granmoe/data-tree-snapshot.git"
   },
   "bugs": {
-    "url": "https://github.com/granmoe/get-attribute-tree/issues"
+    "url": "https://github.com/granmoe/data-tree-snapshot/issues"
   },
   "description": "Snapshot test the compacted tree structure of tagged parts of the DOM",
   "keywords": [
