@@ -1,4 +1,4 @@
-# Data Tree Snapshot 🌳
+# Data Tree Snapshot 🌳🤳
 
 ## Intro
 
@@ -55,14 +55,13 @@ test('example from the README', () => {
 
 #### Implementation
 
-Here's how this is implemented on top of data-tree-snapshot:
-
 ```js
 ```
 
 #### Notes
 
 Link to other repo or move it all in here? Just a lot of text...maybe put in a different file
+💡 Use GH wiki and link to it here
 
 ### Text Snapshotting
 
@@ -100,8 +99,6 @@ test('has correct textContent', () => {
 ```
 
 #### Implementation
-
-Here's how this is implemented on top of data-tree-snapshot:
 
 ```js
 ```
