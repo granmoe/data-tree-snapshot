@@ -1,16 +1,16 @@
 {
-  "name": "get-test-id-tree",
-  "version": "1.0.2",
+  "name": "get-attribute-tree",
+  "version": "1.0.0",
   "main": "dist/index.js",
   "license": "MIT",
   "author": "Matt Granmoe",
-  "homepage": "https://github.com/granmoe/get-test-id-tree",
+  "homepage": "https://github.com/granmoe/get-attribute-tree",
   "repository": {
     "type": "git",
-    "url": "https://github.com/granmoe/get-test-id-tree.git"
+    "url": "https://github.com/granmoe/get-attribute-tree.git"
   },
   "bugs": {
-    "url": "https://github.com/granmoe/get-test-id-tree/issues"
+    "url": "https://github.com/granmoe/get-attribute-tree/issues"
   },
   "description": "Snapshot test the compacted tree structure of tagged parts of the DOM",
   "keywords": [
