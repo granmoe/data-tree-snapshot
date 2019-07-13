@@ -1,7 +1,4 @@
-TODO: Update this and link to get-test-id-tree
-Adapt the GH description of GTIT to this
-
-# Get Attribute Tree 🌳
+# Get Document Data Tree 🌳
 
 ## Intro
 

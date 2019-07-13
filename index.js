@@ -1,4 +1,9 @@
-const makeGetAttributeTree = ({ attributeName, format = a => a, filter }) => {
+const makeGetAttributeTree = ({
+  attributeName,
+  propertyName,
+  format = a => a,
+  filter,
+}) => {
   const getAttributeTree = (elementOrArray, level = 0) => {
     if (Array.isArray(elementOrArray)) {
       return elementOrArray
@@ -9,37 +14,45 @@ const makeGetAttributeTree = ({ attributeName, format = a => a, filter }) => {
 
     const indent = ' '.repeat(level * 2)
 
-    const attribute = elementOrArray.getAttribute(attributeName)
-    const isValidAttribute = filter ? filter(attribute) : true
+    // prettier-ignore
+    const nodeData = attributeName
+      ? elementOrArray.getAttribute(attributeName)
+      : propertyName === 'textContent' // TODO: similar handling for innerText, innerHTML?
+        ? elementOrArray.childNodes[0].nodeValue
+        : elementOrArray[propertyName]
+
+    const isValidNodeData = filter ? filter(nodeData) : true
 
     if (elementOrArray.children.length === 0) {
-      return isValidAttribute ? `${indent}${format(attribute)}` : null
+      return isValidNodeData ? `${indent}${format(nodeData)}` : null
     }
 
     const attributeTree = getAttributeTree(
       [...elementOrArray.children],
-      isValidAttribute ? level + 1 : level,
+      isValidNodeData ? level + 1 : level,
     )
 
     if (attributeTree.length === 0) {
-      return isValidAttribute ? `${indent}${format(attribute)}` : null
+      return isValidNodeData ? `${indent}${format(nodeData)}` : null
     }
 
-    return isValidAttribute
-      ? `${indent}${format(attribute)}\n${attributeTree}`
+    return isValidNodeData
+      ? `${indent}${format(nodeData)}\n${attributeTree}`
       : attributeTree
   }
 
   return getAttributeTree
 }
 
-export default ({ format, filter, attributeName }) => {
-  if (!(typeof attributeName === 'string' && attributeName.length > 0)) {
-    throw new Error('attributeName must be a non-empty string')
-  }
+export default ({ format, filter, attributeName, propertyName }) => {
+  // TODO: Check for either p or a (a ^ p) and validate p similar to a
+  // if (!(typeof attributeName === 'string' && attributeName.length > 0)) {
+  //   throw new Error('attributeName must be a non-empty string')
+  // }
 
   const getAttributeTree = makeGetAttributeTree({
     attributeName,
+    propertyName,
     format,
     filter,
   })
