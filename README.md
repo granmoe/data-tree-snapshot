@@ -66,7 +66,7 @@ Link to other repo or move it all in here? Just a lot of text...maybe put in a d
 
 ### Text Snapshotting
 
-```
+```js
 test('has correct textContent', () => {
   const { container } = render(
     <div>
