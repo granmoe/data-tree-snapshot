@@ -1,6 +1,14 @@
 # Get Test Id Tree 🌴
 
-(This library assumes that you use `data-testid` attributes for testing. The reason to use them is to [make your frontend and end-to-end tests resilient to change](https://kentcdodds.com/blog/making-your-ui-tests-resilient-to-change) (and they may simultaneously be used as convenient handles for things like analytics). As with anything else, they may or may not be right for your use case.)
+## Who This Tool is For
+
+This library assumes that you make heavy use of `data-testid` attributes for testing. The reason to use them is to [make your frontend and end-to-end tests resilient to change](https://kentcdodds.com/blog/making-your-ui-tests-resilient-to-change). As a bonus, they may simultaneously be used as convenient handles for things like analytics. However, you should consider using [accessible or semantic queries if possible](https://testing-library.com/docs/guide-which-query). As with anything else, this library may or may not be right for your use case.
+
+So what is the right use case? Test ids are a good fit for you if the nature of your app is such that the text on your site is volatile (changes constantly due to legal, requirements, marketing, etc) and/or highly dynamic (based on complex logic and/or data). It's extra useful if the structure of your app is similarly volatile and dynamic. In this situation, the accessible and semantic queries make your tests far too brittle.
+
+[Discussion with Kent C. Dodds on data-testids vs other selectors](https://twitter.com/GraynMoog/status/1149869599825047552)
+
+## Intro
 
 Create the smallest possible representation of what test ids are contained in a DOM element and within other test ids within that DOM element. `get-test-id-tree` only preserves ancestor/descendant relationships because it is used to assert that a given test id _contains_ another test id or test ids. This compacted tree structure is created recursively for the entire DOM tree within the given DOM element or data-testid string.
 
