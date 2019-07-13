@@ -1,3 +1,6 @@
+TODO: Update this and link to get-test-id-tree
+Adapt the GH description of GTIT to this
+
 # Get Test Id Tree 🌴
 
 ## Who This Tool is For
