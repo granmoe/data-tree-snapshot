@@ -10,12 +10,18 @@ Create the smallest possible representation of the tree structure of the values 
 npm install data-tree-snapshot -D
 ```
 
-## Examples / Cool Things You Can Do With This
+## API
 
-### Text Snapshotting
+### `printTextContentTree` (Text Snapshotting)
 
 ```js
+import React from 'react'
+import { render } from '@testing-library/react'
+import { printTextContentTree } from 'data-tree-snapshot'
+
 test('has correct textContent', () => {
+  // This is just an example. Normally, the JSX output would be a result of rendering
+  // your app or a subset of your app and taking actions to get it into a given state
   const { container } = render(
     <div>
       Heading
@@ -28,12 +34,7 @@ test('has correct textContent', () => {
     </div>,
   )
 
-  const getTextContentTree = makeGetAttributeTree({
-    propertyName: 'textContent',
-    filter: t => typeof t === 'string' && t.length > 0,
-  })
-
-  const tree = getTextContentTree(container)
+  const tree = printTextContentTree(container)
 
   expect(tree).toMatchInlineSnapshot(`
     "
@@ -51,6 +52,7 @@ test('has correct textContent', () => {
 
 ```js
 import makePrintDataTree from '../make-print-data-tree'
+// 👆The default export of data-tree-snapshot, used to create data tree printers
 
 export default makePrintDataTree({
   propertyName: 'textContent',
@@ -58,15 +60,17 @@ export default makePrintDataTree({
 })
 ```
 
-### Test Id Tree Snapshotting
+### `printTestIdTree` (Test Id Tree Snapshotting)
 
 ```js
 import React from 'react'
 import { render } from '@testing-library/react'
-import { getTestIdTree } from 'data-tree-snapshot' // TODO: Implement this and export it
+import { printTestIdTree } from 'data-tree-snapshot'
 
-test('example from the README', () => {
+test('shows correct components for scenario', () => {
   render(
+    // This is just an example. Normally, the JSX output would be a result of rendering
+    // your app or a subset of your app and taking actions to get it into a given state
     <div data-testid="root">
       <div>
         <div data-testid="parent">
@@ -87,7 +91,7 @@ test('example from the README', () => {
   )
 
   // 👇 You can pass either a data-testid string or an element itself
-  expect(getTestIdTree('root')).toMatchInlineSnapshot(`
+  expect(printTestIdTree('root')).toMatchInlineSnapshot(`
     "
     parent
       child
@@ -105,6 +109,7 @@ test('example from the README', () => {
 
 ```js
 import makePrintDataTree from '../make-print-data-tree'
+// 👆The default export of data-tree-snapshot, used to create data tree printers
 
 // If you use an attribute, the default string selector will be for that attribute
 // e.g. document.querySelector('[data-testid="your-test-id-name"]') will be used for printTestIdTree
@@ -112,6 +117,23 @@ export default makePrintDataTree({
   attributeName: 'data-testid',
   filter: t => typeof t === 'string' && t.length > 0,
 })
+```
+
+### `makePrintDataTree`
+
+This is a function that creates a custom printDataTree function based on the following options object, represented here as a TypeScript interface:
+
+```ts
+interface options {
+  // formats the value before printing it
+  // value is the attribute or property we've gotten from the element
+  // based on attributeName or propertyName
+  format?: (value) => boolean
+  // Only values / elements for which this returns true will be included
+  filter?: (value, element) => boolean
+  attributeName?: string
+  propertyName?: string
+}
 ```
 
 ## Upcoming Features
