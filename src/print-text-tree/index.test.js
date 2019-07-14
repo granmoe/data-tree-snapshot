@@ -17,7 +17,7 @@ test('textContent', () => {
     </div>,
   )
 
-  const tree = printTextTree(container) // TODO: Allow passing in a root selector func
+  const tree = printTextTree(container)
 
   expect(tree).toMatchInlineSnapshot(`
     "

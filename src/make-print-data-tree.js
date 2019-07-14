@@ -45,7 +45,12 @@ const makeGetAttributeTree = ({
 }
 
 export default ({ format, filter, attributeName, propertyName }) => {
-  if (!(attributeName ^ propertyName)) {
+  if (!(Boolean(attributeName) ^ Boolean(propertyName))) {
+    console.log({ attributeName, propertyName })
+    console.log({ attributeName, propertyName })
+    console.log({ attributeName, propertyName })
+    console.log({ attributeName, propertyName })
+
     throw new ReferenceError(
       'You must pass either an attributeName or propertyName option to makePrintDataTree (and only one or the other)',
     )
@@ -59,11 +64,11 @@ export default ({ format, filter, attributeName, propertyName }) => {
     throw new Error('propertyName must be a non-empty string')
   }
 
-  if (typeof format !== undefined && typeof format !== 'function') {
+  if (format !== undefined && typeof format !== 'function') {
     throw new ReferenceError('The format option must be a function')
   }
 
-  if (typeof filter !== undefined && typeof filter !== 'function') {
+  if (filter !== undefined && typeof filter !== 'function') {
     throw new ReferenceError('The filter option must be a function')
   }
 
