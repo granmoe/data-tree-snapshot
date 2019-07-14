@@ -136,6 +136,23 @@ interface options {
 }
 ```
 
+The only requirement is that either `attributeName` or `propertyName` are passed (but not both).
+
+The type of the returned print function is as follows `elementOrString => string`, where `elementOrString` is either an HTML element or a string value to be used as a selector for the given `attributeName` (passing a string selector for property tree printers is currently unsupported).
+
+For example, when calling `printTestIdTree('root')`, `document.querySelector('[data-testid="root"]')` will be called to get the root element for which to print the test id tree.
+
+Full example:
+
+```js
+const getLabelTree = makeGetAttributeTree({
+  attributeName: 'label',
+  filter: l => typeof l === 'string' && l.length > 0,
+})
+
+printLabelTree('some-label-value') // document.querySelector(`[label="some-label-value"]`) will be called to get the root element
+```
+
 ## Upcoming Features
 
 - Include multiple pieces of data per element
