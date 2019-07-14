@@ -33,7 +33,7 @@ test('has correct textContent', () => {
     filter: t => typeof t === 'string' && t.length > 0,
   })
 
-  const tree = getTextContentTree(container) // TODO: Allow passing in a root selector func
+  const tree = getTextContentTree(container)
 
   expect(tree).toMatchInlineSnapshot(`
     "
@@ -106,6 +106,8 @@ test('example from the README', () => {
 ```js
 import makePrintDataTree from '../make-print-data-tree'
 
+// If you use an attribute, the default string selector will be for that attribute
+// e.g. document.querySelector('[data-testid="your-test-id-name"]') will be used for printTestIdTree
 export default makePrintDataTree({
   attributeName: 'data-testid',
   filter: t => typeof t === 'string' && t.length > 0,
@@ -114,4 +116,5 @@ export default makePrintDataTree({
 
 ## Upcoming Features
 
-- Ability to include multiple pieces of data per element
+- Include multiple pieces of data per element
+- Configure selectors for property printers

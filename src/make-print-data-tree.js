@@ -45,10 +45,27 @@ const makeGetAttributeTree = ({
 }
 
 export default ({ format, filter, attributeName, propertyName }) => {
-  // TODO: Check for either p or a (a ^ p) and validate p similar to a
-  // if (!(typeof attributeName === 'string' && attributeName.length > 0)) {
-  //   throw new Error('attributeName must be a non-empty string')
-  // }
+  if (!(attributeName ^ propertyName)) {
+    throw new ReferenceError(
+      'You must pass either an attributeName or propertyName option to makePrintDataTree (and only one or the other)',
+    )
+  }
+
+  if (attributeName) {
+    if (!(typeof attributeName === 'string' && attributeName.length > 0)) {
+      throw new Error('attributeName must be a non-empty string')
+    }
+  } else if (!(typeof propertyName === 'string' && propertyName.length > 0)) {
+    throw new Error('propertyName must be a non-empty string')
+  }
+
+  if (typeof format !== undefined && typeof format !== 'function') {
+    throw new ReferenceError('The format option must be a function')
+  }
+
+  if (typeof filter !== undefined && typeof filter !== 'function') {
+    throw new ReferenceError('The filter option must be a function')
+  }
 
   const getAttributeTree = makeGetAttributeTree({
     attributeName,
@@ -73,7 +90,7 @@ export default ({ format, filter, attributeName, propertyName }) => {
       element = elementOrString
     } else {
       throw new TypeError(
-        'You must pass either an HTML Element or a string to get-test-id-tree',
+        'You must pass either an HTML Element or a string to makePrintDataTree',
       )
     }
 
