@@ -50,6 +50,12 @@ test('has correct textContent', () => {
 #### Implementation
 
 ```js
+import makePrintDataTree from '../make-print-data-tree'
+
+export default makePrintDataTree({
+  propertyName: 'textContent',
+  filter: t => typeof t === 'string' && t.length > 0,
+})
 ```
 
 ### Test Id Tree Snapshotting
@@ -93,15 +99,18 @@ test('example from the README', () => {
 })
 ```
 
+(Lots more good info about this helper [on the wiki page!](https://github.com/granmoe/data-tree-snapshot/wiki/printTestIdTree))
+
 #### Implementation
 
 ```js
+import makePrintDataTree from '../make-print-data-tree'
+
+export default makePrintDataTree({
+  attributeName: 'data-testid',
+  filter: t => typeof t === 'string' && t.length > 0,
+})
 ```
-
-#### Notes
-
-Link to other repo or move it all in here? Just a lot of text...maybe put in a different file
-💡 Use GH wiki and link to it here
 
 ## Upcoming Features
 
