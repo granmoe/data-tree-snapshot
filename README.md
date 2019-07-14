@@ -12,6 +12,46 @@ npm install data-tree-snapshot -D
 
 ## Examples / Cool Things You Can Do With This
 
+### Text Snapshotting
+
+```js
+test('has correct textContent', () => {
+  const { container } = render(
+    <div>
+      Heading
+      <div>
+        Subheading
+        <div>Paragraph 1</div>
+        <div>Paragraph 2</div>
+        <div>Paragraph 3</div>
+      </div>
+    </div>,
+  )
+
+  const getTextContentTree = makeGetAttributeTree({
+    propertyName: 'textContent',
+    filter: t => typeof t === 'string' && t.length > 0,
+  })
+
+  const tree = getTextContentTree(container) // TODO: Allow passing in a root selector func
+
+  expect(tree).toMatchInlineSnapshot(`
+    "
+    Heading
+      Subheading
+        Paragraph 1
+        Paragraph 2
+        Paragraph 3
+    "
+  `)
+})
+```
+
+#### Implementation
+
+```js
+```
+
 ### Test Id Tree Snapshotting
 
 ```js
@@ -62,46 +102,6 @@ test('example from the README', () => {
 
 Link to other repo or move it all in here? Just a lot of text...maybe put in a different file
 💡 Use GH wiki and link to it here
-
-### Text Snapshotting
-
-```js
-test('has correct textContent', () => {
-  const { container } = render(
-    <div>
-      Heading
-      <div>
-        Subheading
-        <div>Paragraph 1</div>
-        <div>Paragraph 2</div>
-        <div>Paragraph 3</div>
-      </div>
-    </div>,
-  )
-
-  const getTextContentTree = makeGetAttributeTree({
-    propertyName: 'textContent',
-    filter: t => typeof t === 'string' && t.length > 0,
-  })
-
-  const tree = getTextContentTree(container) // TODO: Allow passing in a root selector func
-
-  expect(tree).toMatchInlineSnapshot(`
-    "
-    Heading
-      Subheading
-        Paragraph 1
-        Paragraph 2
-        Paragraph 3
-    "
-  `)
-})
-```
-
-#### Implementation
-
-```js
-```
 
 ## Upcoming Features
 

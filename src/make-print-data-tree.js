@@ -17,7 +17,7 @@ const makeGetAttributeTree = ({
     // prettier-ignore
     const nodeData = attributeName
       ? elementOrArray.getAttribute(attributeName)
-      : propertyName === 'textContent' // TODO: similar handling for innerText, innerHTML?
+      : propertyName === 'textContent' // TODO: similar handling for innerText?
         ? elementOrArray.childNodes[0].nodeValue
         : elementOrArray[propertyName]
 
