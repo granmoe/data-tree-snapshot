@@ -1,6 +1,6 @@
 import React from 'react'
 import { cleanup, render } from '@testing-library/react'
-import makeGetAttributeTree from '.'
+import printTextTree from '.'
 
 afterEach(cleanup)
 
@@ -17,12 +17,7 @@ test('textContent', () => {
     </div>,
   )
 
-  const getTextContentTree = makeGetAttributeTree({
-    propertyName: 'textContent',
-    filter: t => typeof t === 'string' && t.length > 0,
-  })
-
-  const tree = getTextContentTree(container) // TODO: Allow passing in a root selector func
+  const tree = printTextTree(container) // TODO: Allow passing in a root selector func
 
   expect(tree).toMatchInlineSnapshot(`
     "
