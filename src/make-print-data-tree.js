@@ -21,7 +21,7 @@ const makeGetAttributeTree = ({
         ? elementOrArray.childNodes[0].nodeValue
         : elementOrArray[propertyName]
 
-    const isValidNodeData = filter ? filter(nodeData) : true
+    const isValidNodeData = filter ? filter(nodeData, elementOrArray) : true
 
     if (elementOrArray.children.length === 0) {
       return isValidNodeData ? `${indent}${format(nodeData)}` : null

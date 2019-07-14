@@ -12,12 +12,12 @@ npm install data-tree-snapshot -D
 
 ## API
 
-### `printTextContentTree` (Text Snapshotting)
+### `printTextTree` (Text Snapshotting, named export)
 
 ```js
 import React from 'react'
 import { render } from '@testing-library/react'
-import { printTextContentTree } from 'data-tree-snapshot'
+import { printTextTree } from 'data-tree-snapshot'
 
 test('has correct textContent', () => {
   // This is just an example. Normally, the JSX output would be a result of rendering
@@ -34,7 +34,7 @@ test('has correct textContent', () => {
     </div>,
   )
 
-  const tree = printTextContentTree(container)
+  const tree = printTextTree(container)
 
   expect(tree).toMatchInlineSnapshot(`
     "
@@ -60,7 +60,7 @@ export default makePrintDataTree({
 })
 ```
 
-### `printTestIdTree` (Test Id Tree Snapshotting)
+### `printTestIdTree` (Test Id Tree Snapshotting, named export)
 
 ```js
 import React from 'react'

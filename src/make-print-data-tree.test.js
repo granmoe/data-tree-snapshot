@@ -1,10 +1,44 @@
 import React from 'react'
 import { cleanup, render } from '@testing-library/react'
-import makeGetAttributeTree from './make-print-data-tree'
+import makePrintDataTree from './make-print-data-tree'
 
 afterEach(cleanup)
 
 // TODO: Test handled errors
+
+test('filtering by both value and element', () => {
+  const { container } = render(
+    <section>
+      <div>
+        <p>Paragraph 1</p>
+        <p>
+          Paragraph <span>2</span>
+        </p>
+        <p data-ignore>Paragraph 3</p>
+      </div>
+    </section>,
+  )
+
+  const printTagNameTree = makePrintDataTree({
+    propertyName: 'tagName',
+    filter: (value, element) =>
+      typeof value === 'string' &&
+      value.length > 0 &&
+      !element.getAttribute('data-ignore'),
+  })
+
+  const tree = printTagNameTree(container)
+
+  expect(tree).toMatchInlineSnapshot(`
+    "
+    SECTION
+      DIV
+        P
+        P
+          SPAN
+    "
+  `)
+})
 
 test('data attribute', () => {
   render(
@@ -15,16 +49,16 @@ test('data attribute', () => {
     </div>,
   )
 
-  const getFooTree = makeGetAttributeTree({ attributeName: 'data-foo' })
+  const getFooTree = makePrintDataTree({ attributeName: 'data-foo' })
   const tree = getFooTree('root')
 
   expect(tree).toMatchInlineSnapshot(`
-                        "
-                        first-child
-                        second-child
-                        third-child
-                        "
-            `)
+                            "
+                            first-child
+                            second-child
+                            third-child
+                            "
+              `)
 })
 
 test('label', () => {
@@ -48,7 +82,7 @@ test('label', () => {
     </div>,
   )
 
-  const getLabelTree = makeGetAttributeTree({
+  const getLabelTree = makePrintDataTree({
     attributeName: 'label',
     filter: l => typeof l === 'string' && l.length > 0,
   })
@@ -56,13 +90,13 @@ test('label', () => {
   const tree = getLabelTree(container)
 
   expect(tree).toMatchInlineSnapshot(`
-            "
-            root
-              parent
-                child
-                  deeply-nested-child
-                another-child
-                yet-another-child
-            "
-      `)
+                "
+                root
+                  parent
+                    child
+                      deeply-nested-child
+                    another-child
+                    yet-another-child
+                "
+        `)
 })
