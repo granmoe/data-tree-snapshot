@@ -1,13 +1,13 @@
-const makeGetAttributeTree = ({
+const makePrintDataTree = ({
   attributeName,
   propertyName,
   format = a => a,
   filter,
 }) => {
-  const getAttributeTree = (elementOrArray, level = 0) => {
+  const printDataTree = (elementOrArray, level = 0) => {
     if (Array.isArray(elementOrArray)) {
       return elementOrArray
-        .map(el => getAttributeTree(el, level))
+        .map(el => printDataTree(el, level))
         .filter(Boolean)
         .join('\n')
     }
@@ -18,7 +18,7 @@ const makeGetAttributeTree = ({
     const nodeData = attributeName
       ? elementOrArray.getAttribute(attributeName)
       : propertyName === 'textContent' // TODO: similar handling for innerText?
-        ? elementOrArray.childNodes[0].nodeValue
+        ? elementOrArray.childNodes.length && elementOrArray.childNodes[0].nodeValue
         : elementOrArray[propertyName]
 
     const isValidNodeData = filter ? filter(nodeData, elementOrArray) : true
@@ -27,7 +27,7 @@ const makeGetAttributeTree = ({
       return isValidNodeData ? `${indent}${format(nodeData)}` : null
     }
 
-    const attributeTree = getAttributeTree(
+    const attributeTree = printDataTree(
       [...elementOrArray.children],
       isValidNodeData ? level + 1 : level,
     )
@@ -41,7 +41,7 @@ const makeGetAttributeTree = ({
       : attributeTree
   }
 
-  return getAttributeTree
+  return printDataTree
 }
 
 export default ({ format, filter, attributeName, propertyName }) => {
@@ -72,7 +72,7 @@ export default ({ format, filter, attributeName, propertyName }) => {
     throw new ReferenceError('The filter option must be a function')
   }
 
-  const getAttributeTree = makeGetAttributeTree({
+  const printDataTree = makePrintDataTree({
     attributeName,
     propertyName,
     format,
@@ -99,6 +99,6 @@ export default ({ format, filter, attributeName, propertyName }) => {
       )
     }
 
-    return `\n${getAttributeTree([...element.children])}\n` // Surround with newlines for nice formatting in jest snapshots and so that horizontal lines in editor line up perfectly in snapshot
+    return `\n${printDataTree([...element.children])}\n` // Surround with newlines for nice formatting in jest snapshots and so that horizontal lines in editor line up perfectly in snapshot
   }
 }
