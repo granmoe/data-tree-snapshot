@@ -2,7 +2,7 @@
 
 ## Intro
 
-Create the smallest possible representation of the tree structure of the values of any attribute or property contained in a DOM element. `get-attribute-tree` only preserves ancestor/descendant relationships because it is used to assert that a given element _contains_ a certain structure. This compacted tree structure is created recursively for the entire DOM tree within the given DOM element.
+Create the smallest possible representation of the tree structure of the values of any attribute or property contained in a DOM element. `data-tree-snapshot` only preserves ancestor/descendant relationships because it is used to assert that a given element _contains_ a certain structure. This compacted tree structure is created recursively for the entire DOM tree within the given DOM element.
 
 ## Installation
 
@@ -145,7 +145,7 @@ For example, when calling `printTestIdTree('root')`, `document.querySelector('[d
 Full example:
 
 ```js
-const getLabelTree = makeGetAttributeTree({
+const getLabelTree = makePrintDataTree({
   attributeName: 'label',
   filter: l => typeof l === 'string' && l.length > 0,
 })

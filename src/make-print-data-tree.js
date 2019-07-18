@@ -46,11 +46,6 @@ const makePrintDataTree = ({
 
 export default ({ format, filter, attributeName, propertyName }) => {
   if (!(Boolean(attributeName) ^ Boolean(propertyName))) {
-    console.log({ attributeName, propertyName })
-    console.log({ attributeName, propertyName })
-    console.log({ attributeName, propertyName })
-    console.log({ attributeName, propertyName })
-
     throw new ReferenceError(
       'You must pass either an attributeName or propertyName option to makePrintDataTree (and only one or the other)',
     )
