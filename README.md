@@ -119,6 +119,10 @@ export default makePrintDataTree({
 })
 ```
 
+### `printQaIdTree`
+
+Same as `printTestIdTree`, except it looks at `data-qa` instead of `data-test-id`.
+
 ### `makePrintDataTree`
 
 This is a function that creates a custom printDataTree function based on the following options object, represented here as a TypeScript interface:
