@@ -1,6 +1,6 @@
 import React from 'react'
 import { cleanup, render } from '@testing-library/react'
-import printTextTree from '.'
+import getTextTree from '.'
 
 afterEach(cleanup)
 
@@ -17,7 +17,7 @@ test('textContent', () => {
     </div>,
   )
 
-  const tree = printTextTree(container)
+  const tree = getTextTree(container)
 
   expect(tree).toMatchInlineSnapshot(`
     "

@@ -1,6 +1,6 @@
 import React from 'react'
 import { cleanup, render } from '@testing-library/react'
-import makePrintDataTree from './make-print-data-tree'
+import makeGetDataTree from './make-get-data-tree'
 
 afterEach(cleanup)
 
@@ -19,7 +19,7 @@ test('filtering by both value and element', () => {
     </section>,
   )
 
-  const printTagNameTree = makePrintDataTree({
+  const getTagNameTree = makeGetDataTree({
     propertyName: 'tagName',
     filter: (value, element) =>
       typeof value === 'string' &&
@@ -27,7 +27,7 @@ test('filtering by both value and element', () => {
       !element.getAttribute('data-ignore'),
   })
 
-  const tree = printTagNameTree(container)
+  const tree = getTagNameTree(container)
 
   expect(tree).toMatchInlineSnapshot(`
     "
@@ -49,7 +49,7 @@ test('data attribute', () => {
     </div>,
   )
 
-  const getFooTree = makePrintDataTree({ attributeName: 'data-foo' })
+  const getFooTree = makeGetDataTree({ attributeName: 'data-foo' })
   const tree = getFooTree('root')
 
   expect(tree).toMatchInlineSnapshot(`
@@ -82,7 +82,7 @@ test('label', () => {
     </div>,
   )
 
-  const getLabelTree = makePrintDataTree({
+  const getLabelTree = makeGetDataTree({
     attributeName: 'label',
     filter: l => typeof l === 'string' && l.length > 0,
   })

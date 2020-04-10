@@ -1,13 +1,13 @@
-const makePrintDataTree = ({
+const makeGetDataTree = ({
   attributeName,
   propertyName,
   format = a => a,
   filter,
 }) => {
-  const printDataTree = (elementOrArray, level = 0) => {
+  const getDataTree = (elementOrArray, level = 0) => {
     if (Array.isArray(elementOrArray)) {
       return elementOrArray
-        .map(el => printDataTree(el, level))
+        .map(el => getDataTree(el, level))
         .filter(Boolean)
         .join('\n')
     }
@@ -27,7 +27,7 @@ const makePrintDataTree = ({
       return isValidNodeData ? `${indent}${format(nodeData)}` : null
     }
 
-    const attributeTree = printDataTree(
+    const attributeTree = getDataTree(
       [...elementOrArray.children],
       isValidNodeData ? level + 1 : level,
     )
@@ -41,13 +41,13 @@ const makePrintDataTree = ({
       : attributeTree
   }
 
-  return printDataTree
+  return getDataTree
 }
 
 export default ({ format, filter, attributeName, propertyName }) => {
   if (!(Boolean(attributeName) ^ Boolean(propertyName))) {
     throw new ReferenceError(
-      'You must pass either an attributeName or propertyName option to makePrintDataTree (and only one or the other)',
+      'You must pass either an attributeName or propertyName option to makeGetDataTree (and only one or the other)',
     )
   }
 
@@ -67,7 +67,7 @@ export default ({ format, filter, attributeName, propertyName }) => {
     throw new ReferenceError('The filter option must be a function')
   }
 
-  const printDataTree = makePrintDataTree({
+  const getDataTree = makeGetDataTree({
     attributeName,
     propertyName,
     format,
@@ -90,10 +90,10 @@ export default ({ format, filter, attributeName, propertyName }) => {
       element = elementOrString
     } else {
       throw new TypeError(
-        'You must pass either an HTML Element or a string to makePrintDataTree',
+        'You must pass either an HTML Element or a string to makeGetDataTree',
       )
     }
 
-    return `\n${printDataTree([...element.children])}\n` // Surround with newlines for nice formatting in jest snapshots and so that horizontal lines in editor line up perfectly in snapshot
+    return `\n${getDataTree([...element.children])}\n` // Surround with newlines for nice formatting in jest snapshots and so that horizontal lines in editor line up perfectly in snapshot
   }
 }
